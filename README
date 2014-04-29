@@ -28,7 +28,7 @@ until a better dependency management toolset exists.
 Here's the command I use to run it:
     ./build.sh && target/wwwfinger acct:mark@markwunsch.com
 
-You have to build the dependencies separatly. I'll write a Makefile
+You have to build the dependencies separately. I'll write a Makefile
 eventually.
 
 Okay, have fun.
