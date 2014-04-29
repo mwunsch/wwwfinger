@@ -47,8 +47,7 @@ fn receive(response: response::ResponseReader<client::NetworkStream>) -> () {
   }
 }
 
-fn response_body(response: response::ResponseReader<client::NetworkStream>) -> Option<~str> {
-  let mut r = response;
+fn response_body(mut r: response::ResponseReader<client::NetworkStream>) -> Option<~str> {
   str::from_utf8_owned(r.read_to_end().unwrap().as_slice().to_owned())
 }
 
