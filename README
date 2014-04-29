@@ -1,0 +1,35 @@
+I'm learning Rust by implementing a WebFinger client.
+http://webfinger.net/
+
+From the WebFinger spec (http://tools.ietf.org/html/rfc7033):
+
+    WebFinger is used to discover information about people or other
+    entities on the Internet that are identified by a URI [6] using
+    standard Hypertext Transfer Protocol (HTTP) [2] methods over a secure
+    transport [12].  A WebFinger resource returns a JavaScript Object
+    Notation (JSON) [5] object describing the entity that is queried.
+    The JSON object is referred to as the JSON Resource Descriptor (JRD).
+
+
+This is a command line utility designed to slurp down the JSON Resource 
+Descriptor and put it on stdout. Not much to it right now. The code is pretty 
+ugly, but it's been a fun learning exercise.
+
+It's not anywhere close to being "done". The cli is halfway implemented.
+I don't think I'm being very smart about pointers/boxes/ownership right now.
+I hope to eventually provide some typesafety around the JRD as well.
+
+There's some code to fallback to WebFist (http://webfist.org/) but it's not 
+implemented (you'll get dead code warnings when you try to build). 
+
+This relies on rust-http and rust-openssl libraries, using git submodules 
+until a better dependency management toolset exists.
+
+Here's the command I use to run it:
+    ./build.sh && target/wwwfinger acct:mark@markwunsch.com
+
+You have to build the dependencies separatly. I'll write a Makefile
+eventually.
+
+Okay, have fun.
+

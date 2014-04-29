@@ -1,0 +1,6 @@
+[submodule "lib/rust-http"]
+	path = lib/rust-http
+	url = https://github.com/chris-morgan/rust-http.git
+[submodule "lib/rust-openssl"]
+	path = lib/rust-openssl
+	url = https://github.com/sfackler/rust-openssl.git
