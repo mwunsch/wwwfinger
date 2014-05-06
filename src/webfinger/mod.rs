@@ -32,14 +32,14 @@ impl WebFinger {
   }
 
   pub fn is_webfist(&self) -> bool {
-    self.maybe_host.clone().filtered(|h| *h == WEBFIST_HOST.to_owned()).is_some()
+    self.maybe_host.clone().map_or(false, |h| h == WEBFIST_HOST.to_owned())
   }
 
   pub fn uri(&self) -> Url {
     let scheme = if self.is_webfist() {
-      ~"http"
+      "http".to_owned()
     } else {
-      ~"https"
+      "https".to_owned()
     };
 
     Url {
@@ -47,9 +47,9 @@ impl WebFinger {
       user: None,
       host: self.determined_host(),
       port: None,
-      path: ~"/.well-known/webfinger",
+      path: "/.well-known/webfinger".to_owned(),
       query: vec!(
-        (~"resource", self.target.to_str())
+        ("resource".to_owned(), self.target.to_str())
       ),
       fragment: None
     }
@@ -77,7 +77,7 @@ impl WebFinger {
 
   fn determined_host(&self) -> ~str {
     self.maybe_host.clone().unwrap_or(
-      if self.target.scheme == ~"acct" {
+      if self.target.scheme == "acct".to_owned() {
         self.target.path.split('@').last().unwrap().to_owned()
       } else {
         self.target.host.clone()
