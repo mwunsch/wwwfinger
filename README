@@ -26,10 +26,9 @@ This relies on rust-http and rust-openssl libraries, using git submodules
 until a better dependency management toolset exists.
 
 Here's the command I use to run it:
-    ./build.sh && target/wwwfinger acct:mark@markwunsch.com
+    make && target/wwwfinger acct:mark@markwunsch.com
 
-You have to build the dependencies separately. I'll write a Makefile
-eventually.
+You have to build the dependencies separately.
 
 Okay, have fun.
 
