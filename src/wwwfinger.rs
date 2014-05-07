@@ -11,18 +11,28 @@ use webfinger::WebFinger;
 
 mod webfinger;
 
+static VERSION: &'static str = "alpha";
+
 fn main() {
   let argv = os::args();
 
   let options = [
-    optflag("h","help","print help information"),
-    optflag("v","version","print version")
+    optflag("h","help","Print usage and exit"),
+    optflag("v","version","Print version and exit")
   ];
 
   let matches = match getopts(argv.tail(), options) {
     Ok(m) => { m }
     Err(f) => { fail!(f.to_err_msg()); }
   };
+
+  if matches.opt_present("h") {
+    return println!("{}", getopts::usage(argv[0], options));
+  }
+
+  if matches.opt_present("v") {
+    return println!("{:s} {:s}", argv[0], VERSION);
+  }
 
   let webfinger = match matches.free.as_slice().head() {
     Some(m) => {
@@ -31,7 +41,7 @@ fn main() {
         Err(f) => { fail!("{}", f); }
       }
     }
-    None => { return println!("{}", getopts::usage(argv[0], options)); }
+    None => { return println!("{}", getopts::short_usage(argv[0], options)); }
   };
 
   match webfinger.call() {
