@@ -28,7 +28,5 @@ until a better dependency management toolset exists.
 Here's the command I use to run it:
     make && target/wwwfinger acct:mark@markwunsch.com
 
-You have to build the dependencies separately.
-
 Okay, have fun.
 
