@@ -15,15 +15,15 @@ static WEBFIST_HOST: &'static str = "webfist.org";
 
 pub struct WebFinger {
   target: Url,
-  maybe_host: Option<~str>
+  maybe_host: Option<StrBuf>
 }
 
 pub fn webfist(url: Url) -> WebFinger {
-  WebFinger::new(url, Some(WEBFIST_HOST.to_owned()))
+  WebFinger::new(url, Some(WEBFIST_HOST.to_strbuf()))
 }
 
 impl WebFinger {
-  pub fn new(url: Url, maybe_host: Option<~str>) -> WebFinger {
+  pub fn new(url: Url, maybe_host: Option<StrBuf>) -> WebFinger {
     WebFinger { target: url, maybe_host: maybe_host }
   }
 
@@ -32,14 +32,14 @@ impl WebFinger {
   }
 
   pub fn is_webfist(&self) -> bool {
-    self.maybe_host.clone().map_or(false, |h| h == WEBFIST_HOST.to_owned())
+    self.maybe_host.clone().map_or(false, |h| h == WEBFIST_HOST.to_strbuf())
   }
 
   pub fn uri(&self) -> Url {
     let scheme = if self.is_webfist() {
-      "http".to_owned()
+      "http".to_strbuf()
     } else {
-      "https".to_owned()
+      "https".to_strbuf()
     };
 
     Url {
@@ -47,9 +47,9 @@ impl WebFinger {
       user: None,
       host: self.determined_host(),
       port: None,
-      path: "/.well-known/webfinger".to_owned(),
+      path: "/.well-known/webfinger".to_strbuf(),
       query: vec!(
-        ("resource".to_owned(), self.target.to_str())
+        ("resource".to_strbuf(), self.target.to_str().to_strbuf())
       ),
       fragment: None
     }
@@ -75,12 +75,12 @@ impl WebFinger {
     webfist(self.target.clone())
   }
 
-  fn determined_host(&self) -> ~str {
+  fn determined_host(&self) -> StrBuf {
     self.maybe_host.clone().unwrap_or(
-      if self.target.scheme == "acct".to_owned() {
-        self.target.path.split('@').last().unwrap().to_owned()
+      if self.target.scheme == "acct".to_strbuf() {
+        self.target.path.as_slice().split('@').last().unwrap().to_strbuf()
       } else {
-        self.target.host.clone()
+        self.target.host.to_strbuf()
       }
     )
   }
@@ -89,6 +89,6 @@ impl WebFinger {
 
 impl fmt::Show for WebFinger {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-    write!(f.buf, "{}", self.uri())
+    write!(f, "{}", self.uri())
   }
 }

@@ -14,7 +14,8 @@ mod webfinger;
 static VERSION: &'static str = "alpha";
 
 fn main() {
-  let argv = os::args();
+  let argv: Vec<StrBuf> = os::args().iter().map(|x| x.to_strbuf()).collect();
+  let program_name = argv.get(0).clone().to_str();
 
   let options = [
     optflag("h","help","Print usage and exit"),
@@ -27,21 +28,21 @@ fn main() {
   };
 
   if matches.opt_present("h") {
-    return println!("{}", getopts::usage(argv[0], options));
+    return println!("{:s}", getopts::usage(program_name, options));
   }
 
   if matches.opt_present("v") {
-    return println!("{:s} {:s}", argv[0], VERSION);
+    return println!("{:s} {:s}", program_name, VERSION);
   }
 
   let webfinger = match matches.free.as_slice().head() {
     Some(m) => {
-      match url::from_str(*m) {
+      match url::from_str(m.to_str()) {
         Ok(u) => { WebFinger::for_resource(u) }
         Err(f) => { fail!("{}", f); }
       }
     }
-    None => { return println!("{}", getopts::short_usage(argv[0], options)); }
+    None => { return println!("{}", getopts::short_usage(program_name, options)); }
   };
 
   match webfinger.call() {
@@ -57,7 +58,7 @@ fn receive(response: response::ResponseReader<client::NetworkStream>) -> () {
   }
 }
 
-fn response_body(mut r: response::ResponseReader<client::NetworkStream>) -> Option<~str> {
+fn response_body(mut r: response::ResponseReader<client::NetworkStream>) -> Result<~str, ~[u8]> {
   str::from_utf8_owned(r.read_to_end().unwrap().as_slice().to_owned())
 }
 
